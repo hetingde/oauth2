@@ -4,6 +4,7 @@ import com.harry.security.entity.Menu;
 import com.harry.security.entity.Role;
 import com.harry.security.mapper.MenuMapper;
 import com.harry.security.mapper.RoleMapper;
+import com.harry.security.mapper.UserPermMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -35,26 +36,30 @@ public class MenuFilterInvocationSecurityMetadataSource implements FilterInvocat
     private MenuMapper menuMapper;
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private UserPermMapper userPermMapper;
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         Set<ConfigAttribute> set = new HashSet<>();
         // 获取请求地址
         String requestUrl = ((FilterInvocation) object).getRequestUrl();
         log.info("requestUrl >> {}", requestUrl);
-        List<Menu> allMenus = menuMapper.findAllMenus();
-        if (!CollectionUtils.isEmpty(allMenus)) {
-            List<String> urlList = allMenus.stream().filter(f->f.getUrl().endsWith("**")?requestUrl.startsWith(f.getUrl().substring(0,f.getUrl().lastIndexOf("/"))):requestUrl.equals(f.getUrl())).map(menu -> menu.getUrl()).collect(Collectors.toList());
-            for (String url:urlList){
-                List<Role> roles = roleMapper.findRolesByUrl(url); //当前请求需要的权限
-                if(!CollectionUtils.isEmpty(roles)){
-                    roles.forEach(role -> {
-                        SecurityConfig securityConfig = new SecurityConfig(role.getAuthority());
-                        set.add(securityConfig);
-                    });
-                }
-            }
+//        List<Menu> allMenus = menuMapper.findAllMenus();
+//        if (!CollectionUtils.isEmpty(allMenus)) {
+//            List<String> urlList = allMenus.stream().filter(f->f.getUrl().endsWith("**")?requestUrl.startsWith(f.getUrl().substring(0,f.getUrl().lastIndexOf("/"))):requestUrl.equals(f.getUrl())).map(menu -> menu.getUrl()).collect(Collectors.toList());
+//            for (String url:urlList){
+//                List<Role> roles = roleMapper.findRolesByUrl(url); //当前请求需要的权限
+//                if(!CollectionUtils.isEmpty(roles)){
+//                    roles.forEach(role -> {
+//                        SecurityConfig securityConfig = new SecurityConfig(role.getAuthority());
+//                        set.add(securityConfig);
+//                    });
+//                }
+//            }
+//
+//        }
 
-        }
+//        userPermMapper.getPermsByUserId()
 
         if (ObjectUtils.isEmpty(set)) {
             return SecurityConfig.createList("ROLE_LOGIN");
