@@ -70,6 +70,9 @@ public class MenuAccessDecisionManager implements AccessDecisionManager {
 //                }
 //            }
 //        }
+        /**
+         * 通过uri来判断是否具有权限
+         */
         if (principal instanceof User) {
 
             User u = (User) principal;
