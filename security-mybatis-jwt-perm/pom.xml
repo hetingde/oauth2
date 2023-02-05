@@ -12,7 +12,7 @@
     <artifactId>security-mybatis-jwt-perm</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>security-mybatis-jwt-perm</name>
-    <description>Demo project for Spring Boot</description>
+    <description>spring security动态权限学习</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
